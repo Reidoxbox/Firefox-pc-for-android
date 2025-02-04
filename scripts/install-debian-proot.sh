@@ -13,4 +13,4 @@ proot-distro login debian -- bash -c "apt update && apt install firefox -y"
 
 echo "Instalação concluída! Para iniciar o Firefox, use: ./start_firefox.sh"
 
-acho "execute install_firefox.sh para baixar o Firefox"
+echo "execute install_firefox.sh para baixar o Firefox"
