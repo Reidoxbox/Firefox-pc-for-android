@@ -1,25 +1,34 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/bin/bash
 
-echo "Baixando e instalando o XServer APK..."
+# URL direta para o XServer ZIP (atualize com o link correto)
+XSERVER_URL="https://github.com/Reidoxbox/Firefox-pc-for-android/releases/download/1.0/xserver.zip"
 
-# Criar diretório temporário
-mkdir -p ~/xserver-apk && cd ~/xserver-apk
+# Criar pasta temporária e baixar
+mkdir -p ~/xserver-install
+cd ~/xserver-install
+wget -O xserver.zip "$XSERVER_URL"
 
-# URL do ZIP contendo o APK no GitHub Releases
-ZIP_URL="https://github.com/Reidoxbox/Firefox-pc-for-android/releases/tag/1.0"
-
-# Baixar o arquivo ZIP do XServer
-wget -O xserver.zip "$ZIP_URL"
+# Verificar se o arquivo foi baixado corretamente
+if [ ! -f "xserver.zip" ]; then
+    echo "Erro: Falha no download do XServer!"
+    exit 1
+fi
 
 # Descompactar o ZIP
-unzip xserver.zip
+unzip xserver.zip || { echo "Erro: Falha ao descompactar o XServer!"; exit 1; }
 
-# Encontrar o APK descompactado e instalar
+# Instalar o APK do XServer
 APK_FILE=$(find . -name "*.apk" | head -n 1)
-if [ -f "$APK_FILE" ]; then
-    pm install "$APK_FILE"
-    echo "XServer instalado com sucesso! Abra o aplicativo e inicie o servidor."
-else
+if [ -z "$APK_FILE" ]; then
     echo "Erro: APK não encontrado no ZIP!"
     exit 1
 fi
+
+echo "Instalando o APK do XServer..."
+pm install "$APK_FILE"
+
+# Limpar arquivos temporários
+cd ..
+rm -rf ~/xserver-install
+
+echo "Instalação do XServer concluída!"
