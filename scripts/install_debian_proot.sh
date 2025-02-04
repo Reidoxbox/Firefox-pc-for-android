@@ -1,16 +1,15 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-# Instalar Proot e outros pacotes necessários
+# Atualizar pacotes e instalar Proot
 pkg update && pkg upgrade -y
-pkg install proot-distro -y
+pkg install -y proot-distro
 
-# Instalar Debian dentro do Proot
+# Instalar Debian no Proot
 proot-distro install debian
 
-# Configurar ambiente
-echo "Iniciando Debian dentro do Proot..."
-proot-distro login debian -- bash -c "apt update && apt install firefox -y"
+# Instalar o Firefox dentro do Debian
+echo "Iniciando Debian e instalando Firefox..."
+proot-distro login debian -- bash -c "apt update && apt install -y firefox"
 
 echo "Instalação concluída! Para iniciar o Firefox, use: ./start_firefox.sh"
-
-echo "execute install_firefox.sh para baixar o Firefox"
+echo "Execute install_firefox.sh para baixar o Firefox via Flatpak."
