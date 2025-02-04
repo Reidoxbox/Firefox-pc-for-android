@@ -20,8 +20,5 @@ bash $PROJECT_DIR/install_firefox.sh || { echo "Erro na instalação do Firefox!
 echo "Instalando Extensões..."
 bash $PROJECT_DIR/install_extensions.sh || { echo "Erro na instalação das extensões!"; exit 1; }
 
-# Iniciar Firefox
-echo "Iniciando o Firefox..."
-bash $PROJECT_DIR/start_firefox.sh || { echo "Erro ao iniciar o Firefox!"; exit 1; }
 
-echo "Instalação completa! O Firefox está pronto para uso."
+
