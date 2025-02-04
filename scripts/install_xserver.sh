@@ -1,34 +1,37 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 
-# URL direta para o XServer ZIP (atualize com o link correto)
-XSERVER_URL="https://github.com/Reidoxbox/Firefox-pc-for-android/releases/download/1.0/xserver.zip"
+# Atualizar pacotes do Termux
+echo "Atualizando pacotes..."
+pkg update && pkg upgrade -y
 
-# Criar pasta temporária e baixar
-mkdir -p ~/xserver-install
-cd ~/xserver-install
-wget -O xserver.zip "$XSERVER_URL"
+# Perguntar ao usuário qual método gráfico deseja instalar
+echo "Escolha o método gráfico:"
+echo "1) XServer XSDL (mais leve)"
+echo "2) XFCE Desktop (mais estável, requer VNC)"
+read -p "Opção (1 ou 2): " GRAFICO
 
-# Verificar se o arquivo foi baixado corretamente
-if [ ! -f "xserver.zip" ]; then
-    echo "Erro: Falha no download do XServer!"
+if [[ "$GRAFICO" == "1" ]]; then
+    # Instalar XServer XSDL
+    echo "Instalando XServer XSDL..."
+    pkg install x11-repo -y
+    pkg install xwayland pulseaudio -y
+    
+    # Baixar e instalar o APK do XServer
+    echo "Baixando e instalando o XServer APK..."
+    wget -O xserver.apk "https://github.com/Reidoxbox/Firefox-pc-for-android/releases/download/1.0/xserver-xsdl-1-20-51.apk"
+    am start -n x.org.server/.MainActivity
+
+elif [[ "$GRAFICO" == "2" ]]; then
+    # Instalar XFCE
+    echo "Instalando XFCE Desktop..."
+    pkg install git -y
+    git clone https://github.com/Yisus7u7/termux-desktop-xfce.git
+    cd termux-desktop-xfce
+    bash install.sh
+    echo "Instalação concluída! Para iniciar o XFCE, use o comando: startxfce4"
+else
+    echo "Opção inválida. Saindo..."
     exit 1
 fi
 
-# Descompactar o ZIP
-unzip xserver.zip || { echo "Erro: Falha ao descompactar o XServer!"; exit 1; }
-
-# Instalar o APK do XServer
-APK_FILE=$(find . -name "*.apk" | head -n 1)
-if [ -z "$APK_FILE" ]; then
-    echo "Erro: APK não encontrado no ZIP!"
-    exit 1
-fi
-
-echo "Instalando o APK do XServer..."
-pm install "$APK_FILE"
-
-# Limpar arquivos temporários
-cd ..
-rm -rf ~/xserver-install
-
-echo "Instalação do XServer concluída!"
+echo "Instalação concluída com sucesso!"
