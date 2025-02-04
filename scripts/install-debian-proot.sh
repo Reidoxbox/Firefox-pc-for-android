@@ -12,3 +12,8 @@ echo "Iniciando Debian dentro do Proot..."
 proot-distro login debian -- bash -c "apt update && apt install firefox -y"
 
 echo "Instalação concluída! Para iniciar o Firefox, use: ./start_firefox.sh"
+
+# Instalar o Firefox
+sudo apt install -y firefox
+
+apt search firefox
