@@ -20,5 +20,5 @@ bash $PROJECT_DIR/install_firefox.sh || { echo "Erro na instalação do Firefox!
 echo "Instalando Extensões..."
 bash $PROJECT_DIR/install_extensions.sh || { echo "Erro na instalação das extensões!"; exit 1; }
 
-
+bash $PROJECT_DIR/install_xserver.sh || { acho "ERRO, ERRO NO XSERVERRRR!!!"; exit 1; }
 
