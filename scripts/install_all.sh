@@ -22,3 +22,20 @@ bash $PROJECT_DIR/install_extensions.sh || { echo "Erro na instalação das exte
 
 bash $PROJECT_DIR/install_xserver.sh || { acho "ERRO, ERRO NO XSERVERRRR!!!"; exit 1; }
 
+# Criar pasta para o Firefox
+mkdir -p ~/firefox-appimage && cd ~/firefox-appimage
+
+# Baixar a versão oficial do Firefox
+wget -O firefox.tar.bz2 "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-US"
+
+# Extrair o arquivo
+tar xjf firefox.tar.bz2
+
+# Mover para um diretório padrão
+mv firefox ~/firefox
+
+# Criar um link simbólico para facilitar a execução
+ln -s ~/firefox/firefox ~/.local/bin/firefox
+
+# Testar se o Firefox abre
+~/firefox/firefox &
