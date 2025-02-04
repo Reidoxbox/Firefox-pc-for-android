@@ -20,7 +20,7 @@ export PULSE_SERVER="$PULSE_SERVER"
 
 # Iniciar o XServer
 echo "Iniciando XServer..."
-am start --user 0 -n x.org.server/x.org.server.RunMainActivity
+am start -n x.org.server/.MainActivity
 
 # Aguardar 5 segundos para o XServer iniciar
 sleep 5
