@@ -14,6 +14,14 @@ proot-distro login debian -- bash -c "apt update && apt install firefox -y"
 echo "Instalação concluída! Para iniciar o Firefox, use: ./start_firefox.sh"
 
 # Instalar o Firefox
-sudo apt install -y firefox
+# Criar diretório para o Firefox
+mkdir -p ~/firefox
 
-apt search firefox
+# Baixar o Firefox mais recente (versão Linux 64 bits)
+wget -O ~/firefox/firefox.tar.bz2 "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=pt-BR"
+
+# Extrair os arquivos
+tar xjf ~/firefox/firefox.tar.bz2 -C ~/firefox --strip-components=1
+
+# Criar um atalho para execução
+ln -sf ~/firefox/firefox ~/usr/bin/firefox
