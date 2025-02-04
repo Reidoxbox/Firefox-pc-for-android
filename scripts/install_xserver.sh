@@ -5,10 +5,21 @@ echo "Baixando e instalando o XServer APK..."
 # Criar diretório temporário
 mkdir -p ~/xserver-apk && cd ~/xserver-apk
 
-# Baixar o APK do XServer
-wget -O xserver.apk "https://github.com/Reidoxbox/Firefox-pc-for-android/releases/tag/1.0"
+# URL do ZIP contendo o APK no GitHub Releases
+ZIP_URL="https://github.com/Reidoxbox/Firefox-pc-for-android/releases/tag/1.0"
 
-# Instalar o APK
-pm install xserver.apk
+# Baixar o arquivo ZIP do XServer
+wget -O xserver.zip "$ZIP_URL"
 
-echo "XServer instalado com sucesso! Abra o aplicativo e inicie o servidor."
+# Descompactar o ZIP
+unzip xserver.zip
+
+# Encontrar o APK descompactado e instalar
+APK_FILE=$(find . -name "*.apk" | head -n 1)
+if [ -f "$APK_FILE" ]; then
+    pm install "$APK_FILE"
+    echo "XServer instalado com sucesso! Abra o aplicativo e inicie o servidor."
+else
+    echo "Erro: APK não encontrado no ZIP!"
+    exit 1
+fi
