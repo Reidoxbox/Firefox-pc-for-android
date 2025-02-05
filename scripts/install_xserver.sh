@@ -35,3 +35,4 @@ else
 fi
 
 echo "Instalação concluída com sucesso!"
+echo "Para abrir o XCFE, utilize o comando startxfce4, se é o Xserver, bash scripts/start.sh"
