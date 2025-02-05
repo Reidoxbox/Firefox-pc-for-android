@@ -22,13 +22,8 @@ export PULSE_SERVER="$PULSE_SERVER"
 echo "Iniciando XServer..."
 am start -n x.org.server/.MainActivity
 
-# Aguardar até que o XServer esteja rodando
-echo "Verificando se o XServer iniciou..."
+# Aguardar 5 segundos para o XServer iniciar
 sleep 5
-if ! pgrep -f X ; then
-    echo "Erro: O XServer não iniciou. Verifique se ele está instalado e tente novamente."
-    exit 1
-fi
 
 # Iniciar Debian dentro do Proot e rodar o Firefox
 echo "Iniciando Debian dentro do Proot..."
@@ -36,15 +31,18 @@ proot-distro login debian -- bash -c "
     export DISPLAY=$DISPLAY
     export PULSE_SERVER=$PULSE_SERVER
     echo 'Verificando se o Firefox está instalado...'
-    
-    if ! command -v firefox &> /dev/null; then
-        echo 'Erro: O Firefox não está instalado dentro do Debian. Execute install_firefox.sh e tente novamente.'
+
+    if [ -f ~/firefox-appimage/firefox.AppImage ]; then
+        echo 'Iniciando o Firefox...'
+        chmod +x ~/firefox-appimage/firefox.AppImage
+        ~/firefox-appimage/firefox.AppImage --no-sandbox &
+    elif command -v firefox &> /dev/null; then
+        echo 'Iniciando o Firefox instalado via pacote...'
+        firefox --verbose &
+    else
+        echo 'Erro: O Firefox não está instalado. Execute install_firefox.sh e tente novamente.'
         exit 1
     fi
-
-    echo 'Iniciando o Firefox...'
-    sleep 2
-    firefox --verbose &
 "
 
 echo "Firefox iniciado com sucesso!"
