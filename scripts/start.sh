@@ -12,11 +12,17 @@ done
 
 # Perguntar ao usuário o endereço do PULSE SERVER
 read -p "Digite o endereço do PULSE SERVER (padrão: 127.0.0.1): " PULSE_SERVER
-PULSE_SERVER=${PULSE_SERVER:-127.0.0.1}  # Se vazio, usa 127.0.0.1
+PULSE_SERVER=${PULSE_SERVER:-127.0.0.1}
 
 # Configurar variáveis de ambiente
 export DISPLAY=":$DISPLAY"
 export PULSE_SERVER="$PULSE_SERVER"
+
+# Verificar se o Ubuntu está instalado no Proot
+if ! proot-distro list | grep -q "ubuntu"; then
+    echo "Erro: O Ubuntu não está instalado no Proot. Instalando automaticamente..."
+    proot-distro install ubuntu
+fi
 
 # Iniciar o XServer
 echo "Iniciando XServer..."
@@ -25,24 +31,20 @@ am start -n x.org.server/.MainActivity
 # Aguardar 5 segundos para o XServer iniciar
 sleep 5
 
-# Iniciar Debian dentro do Proot e rodar o Firefox
-echo "Iniciando Debian dentro do Proot..."
-proot-distro login debian -- bash -c "
+# Iniciar Ubuntu dentro do Proot e rodar o Firefox
+echo "Iniciando Ubuntu dentro do Proot..."
+proot-distro login ubuntu -- bash -c "
     export DISPLAY=$DISPLAY
     export PULSE_SERVER=$PULSE_SERVER
     echo 'Verificando se o Firefox está instalado...'
 
-    if [ -f ~/firefox-appimage/firefox.AppImage ]; then
-        echo 'Iniciando o Firefox...'
-        chmod +x ~/firefox-appimage/firefox.AppImage
-        ~/firefox-appimage/firefox.AppImage --no-sandbox &
-    elif command -v firefox &> /dev/null; then
-        echo 'Iniciando o Firefox instalado via pacote...'
-        firefox --verbose &
-    else
-        echo 'Erro: O Firefox não está instalado. Execute install_firefox.sh e tente novamente.'
-        exit 1
+    if ! command -v firefox &> /dev/null; then
+        echo 'Erro: O Firefox não está instalado dentro do Ubuntu. Instalando agora...'
+        apt update && apt install -y firefox
     fi
+
+    echo 'Iniciando o Firefox...'
+    firefox --no-sandbox --verbose &
 "
 
 echo "Firefox iniciado com sucesso!"
